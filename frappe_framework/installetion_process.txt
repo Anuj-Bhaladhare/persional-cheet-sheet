@@ -1,0 +1,398 @@
+sudo apt-get install python3-dev python3.11-dev python3-setuptools python3-pip python3-distutils software-properties-common xvfb libfontconfig wkhtmltopdf libmysqlclient-dev -y
+
+
+[mysqld]
+
+innodb-file-format=barracuda
+innodb-file-per-table=1
+innodb-large-prefix=1
+character-set-client-handshake = FALSE
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+[mysql]
+
+default-character-set = utf8mb4
+
+
+
+systemctl restart mariadb
+
+
+useradd -m -s /bin/bash erpnext
+passwd erpnext
+usermod -aG sudo erpnext
+su - erpnext
+nano ~/.bashrc
+PATH=$PATH:~/.local/bin/
+
+sudo chown -R erpnext:erpnext /opt/bench
+
+yarn add node-sass
+
+===================================
+yarn --version
+sudo npm uninstall -g yarn
+
+
+sudo rm -rf /usr/local/bin/yarn
+sudo rm -rf /usr/local/bin/yarnpkg
+sudo rm -rf /usr/local/share/yarn
+sudo rm -rf /usr/local/share/.config/yarn
+sudo rm -rf /usr/local/lib/node_modules/yarn
+
+
+sudo rm -rf /usr/lib/node_modules/yarn
+
+yarn add node-sass
+
+pip3 install frappe-bench
+bench init frappe-bench --frappe-branch version-15
+sudo apt install python3.10-venv
+
+sudo apt-get update
+sudo apt-get install -y python3-minimal build-essential python3-setuptools
+
+sudo apt-get install -y python3-pip
+sudo pip3 install frappe-bench
+
+
+cd ./opt/bench
+bench init --frappe-branch version-15 frappe-bench
+
+
+bench --version
+
+
+
+
+========================================================
+
+
+To access your ERPNext site globally (i.e., from any device connected to the internet), you need to set up a few things: a public-facing server, a domain name, and SSL/TLS for secure connections. Here are the steps to achieve this:
+
+### Step 1: Set Up a Public-Facing Server
+
+1. **Choose a Hosting Provider**:
+   - You can use cloud providers like Amazon Web Services (AWS), Google Cloud Platform (GCP), DigitalOcean, or others to host your ERPNext instance.
+
+2. **Provision a Server**:
+   - Create a new virtual machine (VM) or server instance on your chosen provider.
+   - Ensure that the server has sufficient resources to run ERPNext smoothly (typically at least 2GB of RAM and 2 CPUs).
+
+3. **Install Necessary Software**:
+   - Set up your server with the necessary software (Linux distribution like Ubuntu, Nginx, Python, Node.js, etc.).
+
+### Step 2: Install ERPNext on the Server
+
+1. **SSH into your Server**:
+   - Use an SSH client to connect to your server:
+     ```bash
+     ssh username@your-server-ip
+     ```
+
+2. **Install Bench and ERPNext**:
+   - Follow the ERPNext installation instructions for production setup:
+     ```bash
+     sudo apt-get update
+     sudo apt-get install python3-minimal build-essential python3-setuptools
+     sudo apt-get install python3-pip
+     sudo pip3 install frappe-bench
+     ```
+
+   - Initialize a new bench and create a new site:
+     ```bash
+     bench init --frappe-branch version-13 frappe-bench
+     cd frappe-bench
+     bench new-site erp.ifssgroup.in
+     bench get-app erpnext --branch version-13
+     bench --site erp.ifssgroup.in install-app erpnext
+     ```
+
+### Step 3: Configure DNS
+
+1. **Purchase a Domain Name**:
+   - Purchase a domain name from a registrar like GoDaddy, Namecheap, etc.
+
+2. **Set Up DNS Records**:
+   - Log into your domain registrar's control panel.
+   - Create an `A` record pointing your domain to the public IP address of your server.
+
+### Step 4: Configure ERPNext Site
+
+1. **Add your Domain to ERPNext Site**:
+   ```bash
+   cd /opt/bench
+   bench config dns_multitenant on
+   bench setup add-domain --site erp.ifssgroup.in ifssgroup.in
+   ```
+
+2. **Update Nginx Configuration**:
+   - Generate the Nginx configuration:
+     ```bash
+     bench setup nginx
+     sudo service nginx reload
+     ```
+
+### Step 5: Enable SSL/TLS
+
+1. **Install Certbot**:
+   - Certbot is a tool to obtain and manage SSL/TLS certificates from Let's Encrypt:
+     ```bash
+     sudo apt-get install certbot
+     ```
+
+2. **Obtain a Certificate**:
+   - Run the following command to obtain a certificate and configure Nginx:
+     ```bash
+     sudo certbot --nginx
+     ```
+
+3. **Renew Certificate Automatically**:
+   - Ensure your certificates are renewed automatically by setting up a cron job:
+     ```bash
+     sudo crontab -e
+     ```
+   - Add the following line to renew the certificate automatically:
+     ```bash
+     0 3 * * * /usr/bin/certbot renew --quiet
+     ```
+
+### Step 6: Start Your Bench
+
+1. **Start the bench**:
+   ```bash
+   bench start
+   ```
+
+### Accessing Your Site
+
+After completing these steps, you should be able to access your ERPNext site globally using `https://your-domain.com`.
+
+### Example Workflow
+
+Here’s a complete example of the workflow:
+
+1. **Provision a server** on a cloud provider like AWS, DigitalOcean, etc.
+
+2. **SSH into your server**:
+   ```bash
+   ssh username@your-server-ip
+   ```
+
+3. **Install Bench and ERPNext**:
+   ```bash
+   sudo apt-get update
+   sudo apt-get install python3-minimal build-essential python3-setuptools
+   sudo apt-get install python3-pip
+   sudo pip3 install frappe-bench
+   bench init --frappe-branch version-13 frappe-bench
+   cd frappe-bench
+   bench new-site your-site-name.com
+   bench get-app erpnext --branch version-13
+   bench --site your-site-name.com install-app erpnext
+   ```
+
+4. **Set up DNS records** to point your domain to your server’s IP address.
+
+5. **Add your domain to ERPNext site**:
+   ```bash
+   bench config dns_multitenant on
+   bench setup add-domain --site your-site-name.com your-domain.com
+   ```
+
+6. **Generate and reload Nginx configuration**:
+   ```bash
+   bench setup nginx
+   sudo service nginx reload
+   ```
+
+7. **Install Certbot and obtain an SSL certificate**:
+   ```bash
+   sudo apt-get install certbot
+   sudo certbot --nginx
+   ```
+
+8. **Start the bench**:
+   ```bash
+   bench start
+   ```
+
+By following these steps, your ERPNext site should be accessible globally using the custom domain `https://your-domain.com`. If you encounter any issues, ensure that all services are running correctly, and check the logs for detailed error messages.
+
+
+========================= For Locally ===============================
+
+To run your ERPNext site locally with the subdomain `epr.ifssgroup.in`, you need to configure your local machine to recognize this domain and route it to your local ERPNext instance. Here are the steps to achieve this:
+
+### Step 1: Set Up ERPNext Locally
+
+If you haven't already set up ERPNext locally, follow these steps:
+
+1. **Ensure Prerequisites are Installed**:
+   - Install necessary software (Node.js, npm, Redis, MariaDB, etc.).
+
+2. **Install Bench**:
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y python3-minimal build-essential python3-setuptools
+   sudo apt-get install -y python3-pip
+   sudo pip3 install frappe-bench
+   ```
+
+3. **Initialize Bench and Create a New Site**:
+   ```bash
+   bench init --frappe-branch version-13 frappe-bench
+   cd frappe-bench
+   bench new-site epr.ifssgroup.in
+   bench get-app erpnext --branch version-13
+   bench --site epr.ifssgroup.in install-app erpnext
+   ```
+
+### Step 2: Update Your Hosts File
+
+The hosts file is a system file that maps hostnames to IP addresses. By updating this file, you can make your local machine recognize `epr.ifssgroup.in` as pointing to your local ERPNext server.
+
+#### For Linux and macOS
+
+1. Open a terminal and edit the hosts file:
+   ```bash
+   sudo nano /etc/hosts
+   ```
+
+2. Add the following line to the file:
+   ```
+   127.0.0.1   epr.ifssgroup.in
+   ```
+
+3. Save the file and exit the editor (in nano, press `CTRL+O` to save and `CTRL+X` to exit).
+
+#### For Windows
+
+1. Open Notepad as an administrator (right-click on Notepad and select "Run as administrator").
+
+2. Open the hosts file located at `C:\Windows\System32\drivers\etc\hosts`.
+
+3. Add the following line to the file:
+   ```
+   127.0.0.1   epr.ifssgroup.in
+   ```
+
+4. Save the file and close Notepad.
+
+### Step 3: Configure ERPNext Site
+
+1. **Navigate to your bench directory**:
+   ```bash
+   cd /path/to/frappe-bench
+   ```
+
+2. **Add your Subdomain to ERPNext Site**:
+   ```bash
+   bench config dns_multitenant on
+   bench setup add-domain --site epr.ifssgroup.in epr.ifssgroup.in
+   ```
+
+3. **Update Nginx Configuration** (if you're using Nginx):
+   - Generate the Nginx configuration:
+     ```bash
+     bench setup nginx
+     sudo service nginx reload
+     ```
+
+### Step 4: Start Your Bench
+
+1. **Start the bench**:
+   ```bash
+   bench start
+   ```
+
+### Accessing Your Site Locally
+
+After completing these steps, you should be able to access your ERPNext site locally by navigating to `http://epr.ifssgroup.in` in your web browser.
+
+### Example Workflow
+
+Here’s a complete example of the workflow:
+
+1. **Ensure prerequisites are installed**.
+
+2. **Install Bench**:
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y python3-minimal build-essential python3-setuptools
+   sudo apt-get install -y python3-pip
+   sudo pip3 install frappe-bench
+   ```
+
+3. **Initialize Bench and Create a New Site**:
+   ```bash
+   bench init --frappe-branch version-13 frappe-bench
+   cd frappe-bench
+   bench new-site epr.ifssgroup.in
+   bench get-app erpnext --branch version-13
+   bench --site epr.ifssgroup.in install-app erpnext
+   ```
+
+4. **Update the hosts file**:
+   - Open terminal and edit `/etc/hosts` (Linux/macOS) or `C:\Windows\System32\drivers\etc\hosts` (Windows).
+   - Add `127.0.0.1   epr.ifssgroup.in`.
+
+5. **Add your subdomain to ERPNext site**:
+   ```bash
+   cd /path/to/frappe-bench
+   bench config dns_multitenant on
+   bench setup add-domain --site epr.ifssgroup.in epr.ifssgroup.in
+   ```
+
+6. **Generate and reload Nginx configuration** (if using Nginx):
+   ```bash
+   bench setup nginx
+   sudo service nginx reload
+   ```
+
+7. **Start the bench**:
+   ```bash
+   bench start
+   ```
+
+By following these steps, your ERPNext site should be accessible locally using the subdomain `http://epr.ifssgroup.in`. If you encounter any issues, ensure that all services are running correctly and check the logs for detailed error messages.
+
+
+
+
+==================================================
+bench init --frappe-branch version-15 frappe-bench
+cd frappe-bench
+bench new-site epr.ifssgroup.in
+bench get-app erpnext --branch version-13
+bench --site epr.ifssgroup.in install-app erpnext
+
+
+
+===============================================
+{
+  "db_host": "127.0.0.1",
+  "db_port": 3306,
+  "db_name": "your_database",
+  "db_user": "root",
+  "db_password": "your_password"
+}
+
+sudo mysql -u root -p
+SHOW DATABASES;
+select mysql
+
+CREATE DATABASE erp_ifssgroup_in;
+CREATE USER 'erpnext'@'localhost' IDENTIFIED BY 'QPALZM-woskxn-10@37fh';
+DROP DATABASE epr_ifssgroup_in;
+
+SELECT user,host FROM mysql.user WHERE user='erpnext';
+
+GRANT ALL PRIVILEGES ON erp_ifssgroup_in.* TO 'erpnext'@'localhost';
+
+FLUSH PRIVILEGES;
+SHOW GRANTS FOR 'erpnext'@'localhost';
+
+bench get-app erpnext --branch version-15
+bench --site erp.ifssgroup.in install-app erpnext
