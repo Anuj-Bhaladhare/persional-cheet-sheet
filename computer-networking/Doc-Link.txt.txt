@@ -1,0 +1,44 @@
+1. https://www.univ-smb.fr/lorawan/en/free-book/?utm_source=chatgpt.com
+2. https://lora-alliance.org/lorawan-news/free-lorawan-book/?utm_source=chatgpt.com
+3. https://www.thethingsnetwork.org/docs/lorawan/what-is-lorawan/?utm_source=chatgpt.com
+4. https://arxiv.org/abs/1908.10195?utm_source=chatgpt.com
+
+
+
+
+
+
+ifsstech@ubuntu:~/yocto-rpi/poky/build$ bitbake core-image-minimal
+Loading cache: 100% |                                                                                    | ETA:  --:--:--
+Loaded 0 entries from dependency cache.
+Parsing recipes: 100% |###################################################################################| Time: 0:00:39
+Parsing of 883 .bb files complete (0 cached, 883 parsed). 1644 targets, 45 skipped, 0 masked, 0 errors.
+NOTE: Resolving any missing task queue dependencies
+
+Build Configuration:
+BB_VERSION           = "2.0.0"
+BUILD_SYS            = "aarch64-linux"
+NATIVELSBSTRING      = "ubuntu-22.04"
+TARGET_SYS           = "x86_64-poky-linux"
+MACHINE              = "qemux86-64"
+DISTRO               = "poky"
+DISTRO_VERSION       = "4.0.28"
+TUNE_FEATURES        = "m64 core2"
+TARGET_FPU           = ""
+meta                 
+meta-poky            
+meta-yocto-bsp       = "kirkstone:78c9cb3eaf071932567835742608404d5ce23cc4"
+
+NOTE: Fetching uninative binary shim http://downloads.yoctoproject.org/releases/uninative/4.7/aarch64-nativesdk-libc-4.7.tar.xz;sha256sum=ac440e4fc80665c79f9718c665c6e28d771e51609c088c3c97ba3ad5cfed197a (will check PREMIRRORS first)
+WARNING: The Linux kernel on your build host was not configured to provide process I/O statistics. (CONFIG_TASK_IO_ACCOUNTING is not set)
+Initialising tasks: 100% |################################################################################| Time: 0:00:03
+Sstate summary: Wanted 1397 Local 0 Mirrors 0 Missed 1397 Current 0 (0% match, 0% complete)
+NOTE: Executing Tasks
+WARNING: libcap-ng-native-0.8.2-r0 do_fetch: Failed to fetch URL https://people.redhat.com/sgrubb/libcap-ng/libcap-ng-0.8.2.tar.gz, attempting MIRRORS if available
+WARNING: util-macros-1_1.19.3-r0 do_fetch: Failed to fetch URL https://www.x.org/releases//individual/util/util-macros-1.19.3.tar.gz, attempting MIRRORS if available
+WARNING: fontconfig-2.13.1-r0 do_fetch: Failed to fetch URL http://fontconfig.org/release/fontconfig-2.13.1.tar.gz, attempting MIRRORS if available
+WARNING: tcp-wrappers-7.6-r10 do_fetch: Failed to fetch URL http://ftp.porcupine.org/pub/security/tcp_wrappers_7.6.tar.gz, attempting MIRRORS if available
+NOTE: Tasks Summary: Attempted 3595 tasks of which 0 didn't need to be rerun and all succeeded.
+
+Summary: There were 5 WARNING messages.
+
