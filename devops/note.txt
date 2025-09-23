@@ -1,0 +1,38 @@
+
+
+===>>> List of DevOps tools <<<===
+
+ - From sources across the web
+ - Ansible
+ - Jenkins
+ - Docker
+ - Git
+ - Kubernetes
+ - Puppet
+ - Terraform
+ - Chef
+ - Continuous integration
+ - GitLab
+ - Prometheus
+ - Bamboo
+ - Jira
+ - Bitbucket
+ - CircleCI
+ - Configuration management
+ - Vagrant
+ - Azure DevOps Server
+ - Datadog
+ - Salt
+ - Nagios
+ - Selenium
+ - DevOps automation tools
+ - Container management
+
+
+
+
+
+
+
+
+
